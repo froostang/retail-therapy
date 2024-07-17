@@ -3,13 +3,14 @@ package middleware
 import (
 	"log"
 	"net/http"
+	"runtime"
 )
 
 func PanicRecovery(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		defer func() {
 			if err := recover(); err != nil {
-				log.Printf("Panic occurred: %v", err)
+				log.Printf("Panic occurred: %v", runtime.StartTrace().Error())
 				http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 			}
 		}()
