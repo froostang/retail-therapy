@@ -3,7 +3,7 @@ module github.com/froostang/retail-therapy/api
 go 1.21.1
 
 require (
-	github.com/froostang/retail-therapy/shared v0.0.0-20240717041413-73692de9d684
+	github.com/froostang/retail-therapy/shared v0.0.0-20240717051443-5a48cecaaf3f
 	github.com/spf13/cobra v1.8.1
 	go.uber.org/zap v1.27.0
 )

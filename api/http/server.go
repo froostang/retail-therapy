@@ -15,6 +15,8 @@ func NewServer(logger *zap.Logger) {
 
 	// Apply JWT middleware to all routes
 	http.Handle("/", middleware.JWTMiddleware(http.DefaultServeMux))
+	// Apply panic recover middleware
+	http.Handle("/", middleware.PanicRecovery(http.DefaultServeMux))
 
 	fmt.Println("Server is running on port 8080")
 	http.ListenAndServe(":8080", nil)
