@@ -1,6 +1,3 @@
-# retail-therapy
-
-
 - make build
 
 Variables
