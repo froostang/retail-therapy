@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/froostang/retail-therapy/api/http"
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
 )
@@ -15,22 +16,11 @@ var rootCmd = &cobra.Command{
 		logger, _ := zap.NewProduction()
 		defer logger.Sync()
 
-		// TODO Add HTTP Server
+		logger.Info("Service starting")
 
+		http.NewServer(logger)
 		// Your main service logic here
-		logger.Info("Service started")
-
-		// Example of logging an error
-		logger.Error("An error occurred", zap.Error(fmt.Errorf("example error")))
-
-		// Example of logging a warning
-		logger.Warn("A warning message")
-
-		// Example of logging an info message
-		logger.Info("An info message")
-
-		// Example of logging a debug message
-		logger.Debug("A debug message")
+		logger.Info("Service stopped")
 	},
 }
 

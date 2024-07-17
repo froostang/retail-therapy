@@ -4,6 +4,7 @@ import (
 	"html/template"
 	"net/http"
 
+	"github.com/froostang/retail-therapy/api/logging"
 	"github.com/froostang/retail-therapy/api/product"
 	"github.com/froostang/retail-therapy/api/user"
 )
@@ -13,7 +14,32 @@ type ShoppingData struct {
 	Products []product.Scraped
 }
 
-func ShoppingHandler(w http.ResponseWriter, r *http.Request) {
+type ShoppingManager struct {
+	logger logging.Logger
+}
+
+type optFunc func(sm *ShoppingManager) *ShoppingManager
+
+func AddLogger(logger logging.Logger) optFunc {
+	return func(sm *ShoppingManager) *ShoppingManager {
+		if sm.logger != nil {
+			sm.logger = logger
+
+		}
+		return sm
+	}
+}
+
+func NewShoppingManager(opts ...optFunc) *ShoppingManager {
+	sm := &ShoppingManager{}
+	for _, f := range opts {
+		sm = f(sm)
+	}
+
+	return sm
+}
+
+func (sm ShoppingManager) ShoppingHandler(w http.ResponseWriter, r *http.Request) {
 	user := user.User{
 		Name:  "John Doe",
 		Email: "john.doe@example.com",
@@ -23,12 +49,14 @@ func ShoppingHandler(w http.ResponseWriter, r *http.Request) {
 
 	tmpl, err := template.ParseFiles("templates/shopping.html")
 	if err != nil {
+		sm.logger.Error("template", (err))
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
 
 	err = tmpl.Execute(w, ShoppingData{User: user, Products: products})
 	if err != nil {
+		sm.logger.Error("template execute", (err))
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}

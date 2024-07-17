@@ -4,13 +4,14 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/froostang/retail-therapy/api/http/handlers"
+	"github.com/froostang/retail-therapy/shared/loggers"
 	"github.com/froostang/retail-therapy/shared/middleware"
+	"go.uber.org/zap"
 )
 
-func NewServer() {
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Hello, World!"))
-	})
+func NewServer(logger *zap.Logger) {
+	http.HandleFunc("/hello", handlers.NewShoppingManager(handlers.AddLogger(loggers.NewZapLogger(logger))).ShoppingHandler)
 
 	// Apply JWT middleware to all routes
 	http.Handle("/", middleware.JWTMiddleware(http.DefaultServeMux))
