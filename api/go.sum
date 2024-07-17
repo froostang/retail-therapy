@@ -1,8 +1,6 @@
 github.com/cpuguy83/go-md2man/v2 v2.0.4/go.mod h1:tgQtvFlXSQOSOSIRvRPT7W67SCa46tRHOmNcaadrF8o=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-github.com/froostang/retail-therapy/shared v0.0.0-20240717054404-0401bbc05a8e h1:etPdPLc2z+Yli9LteDrXl+zclquXJg5EW8aZkj8Icv4=
-github.com/froostang/retail-therapy/shared v0.0.0-20240717054404-0401bbc05a8e/go.mod h1:1hz/123V2UmmtK2+CcnixQAJAXuMrgT9JMKZ+nQbdxk=
 github.com/froostang/retail-therapy/shared v0.0.0-20240717060641-e4dd82d9e371 h1:uoxXjWiPBSBMJiqU1faZwweaBjYyf+SvKfAiRgLTBHE=
 github.com/froostang/retail-therapy/shared v0.0.0-20240717060641-e4dd82d9e371/go.mod h1:1hz/123V2UmmtK2+CcnixQAJAXuMrgT9JMKZ+nQbdxk=
 github.com/golang-jwt/jwt v3.2.2+incompatible h1:IfV12K8xAKAnZqdXVzCZ+TOjboZ2keLg81eXfW3O+oY=
