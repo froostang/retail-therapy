@@ -7,14 +7,17 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
+// TODO: add logging component?
 func JWTMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		tokenString := extractTokenFromHeader(r)
 		if tokenString == "" {
-			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			// http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			http.Redirect(w, r, "/unauthorized", http.StatusFound)
 			return
 		}
 
+		// TODO: redirect on bad auth correctly for login
 		token, err := validateToken(tokenString)
 		if err != nil {
 			http.Error(w, "Invalid token", http.StatusUnauthorized)

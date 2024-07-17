@@ -57,18 +57,22 @@
     </head>
 <body>
     <header>
-        <h1>Welcome, {{.Name}}!</h1>
-        <p>Email: {{.Email}}</p>
+        <h1>Welcome, {{.User.Name}}!</h1>
+        <p>Email: {{.User.Email}}</p>
     </header>
+    {{range .Products}}
     <div class="container">
         <!-- Product listings -->
         <div class="product">
-            <img src="product-image.jpg" alt="Product Image">
-            <h2>Product Title</h2>
+            <img src="{{.ImageURL}}" alt="Product Image">
+            <h2>{{.Name}}</h2>
             <p>Description of the product goes here.</p>
             <p>Price: $XX.XX</p>
+            <button>Purchase</button>
         </div>
     </div>
+    {{end}}
+    <br>
     <footer>
         <!-- Footer content -->
         &copy; 2024 Froostang
