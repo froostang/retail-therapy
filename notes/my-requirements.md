@@ -16,12 +16,14 @@
 - common template attributes (manually validated)
 - rate limited? not public?
 - start with target.com
+- MVP is this is self-generated instead
 
 
 # web
-- typescript web client
+- typescript web client?
 - or simple http
 - styling
+- MVP potentially just server-side rendering
 
 
 # database
