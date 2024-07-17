@@ -8,6 +8,6 @@ ARCH=amd64
 
 # Build command
 build:
-	GOOS=$(OS) GOARCH=$(ARCH) go build -o $(BUILD_DIR)/$(BINARY_NAME) ./cmd
+	GOOS=$(OS) GOARCH=$(ARCH) go build -o $(BUILD_DIR)/$(BINARY_NAME)
 
 .PHONY: build

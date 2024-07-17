@@ -1,7 +1,12 @@
 package main
 
-import "github.com/froostang/retail-therapy/api/cmd"
+import (
+	"fmt"
+
+	"github.com/froostang/retail-therapy/api/cmd"
+)
 
 func main() {
+	fmt.Println("API")
 	cmd.Execute()
 }
