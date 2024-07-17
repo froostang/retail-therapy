@@ -1,5 +1,5 @@
 # api
-- server side rendering?
+- server side rendering
 - library-free http server framework
 - JWT middleware
 - secret management
