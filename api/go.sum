@@ -3,6 +3,10 @@ github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/froostang/retail-therapy/shared v0.0.0-20240717035514-24e8f0ff4a51 h1:stVJtDsl19qpLMQY5wlbU5YENfKh54AYlqsbFxB3B3U=
 github.com/froostang/retail-therapy/shared v0.0.0-20240717035514-24e8f0ff4a51/go.mod h1:iwpsPApTKvVBDqc8JoXgjmMlUGOZvtqxWrt4/AgpYNg=
+github.com/froostang/retail-therapy/shared v0.0.0-20240717041413-73692de9d684 h1:5lAeu854zlqJawjPl0dOYTvXKjG68qXb5/332juVCzs=
+github.com/froostang/retail-therapy/shared v0.0.0-20240717041413-73692de9d684/go.mod h1:0LRFTBQGgppXMpPCoD5+8QwuRUhTwvYKwVHr8wYWueE=
+github.com/golang-jwt/jwt v3.2.2+incompatible h1:IfV12K8xAKAnZqdXVzCZ+TOjboZ2keLg81eXfW3O+oY=
+github.com/golang-jwt/jwt v3.2.2+incompatible/go.mod h1:8pz2t5EyA70fFQQSrl6XZXzqecmYZeUEB8OUGHkxJ+I=
 github.com/inconshreveable/mousetrap v1.1.0 h1:wN+x4NVGpMsO7ErUn/mUI3vEoE6Jt13X2s0bqwp9tc8=
 github.com/inconshreveable/mousetrap v1.1.0/go.mod h1:vpF70FUmC8bwa3OWnCshd2FqLfsEA9PFc4w1p2J65bw=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
