@@ -1,14 +1,24 @@
 package product
 
+import "github.com/froostang/retail-therapy/shared/scraper"
+
 type Requester interface {
 	Scrape(string) Scraped
 }
 
-type Scraper struct {
+type ScraperRequest struct {
 }
 
-func (s *Scraper) Scrape(url string) Scraped {
-	i, p, err := s.ScrapeForImagePrice(url)
+func (s *ScraperRequest) Scrape(url string) (*Scraped, error) {
+	i, p, err := scraper.ScrapeForImagePrice(url)
+	if err != nil {
+		return nil, err
+	}
+	return &Scraped{
+		ImageURL: i,
+		Price:    p,
+		Name:     "test",
+	}, nil
 }
 
 type Scraped struct {
