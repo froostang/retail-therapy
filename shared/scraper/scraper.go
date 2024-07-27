@@ -7,8 +7,6 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-
-	"github.com/froostang/retail-therapy/shared/scraper/assets"
 )
 
 var ErrBadURL = errors.New("bad URL")
@@ -19,20 +17,25 @@ func isTargetURL(str string) bool {
 	return err == nil && u.Scheme != "" && u.Host != "" && u.Host == "www.target.com"
 }
 
-// only supports target URLs
-func ScrapeForImagePrice(url string) (string, string, error) {
+type AssetGetter interface {
+	GetImage(body []byte) (string, error)
+	GetPrice(body []byte) (float64, error)
+}
+
+// ScrapeForImagePrice uses AssetGetter to fetch image and price
+func ScrapeForImagePrice(url string, getter AssetGetter) (string, string, error) {
 
 	var imageURL, price string
 
 	if !isTargetURL(url) {
-		return imageURL, price, fmt.Errorf("received: %s, %w", url, ErrBadURL)
+		return imageURL, price, ErrBadURL
 	}
 
 	sanitized := html.EscapeString(url)
 
 	resp, err := http.Get(sanitized)
 	if err != nil {
-		return imageURL, price, fmt.Errorf("%w : %s", ErrBadURL, url)
+		return imageURL, price, ErrBadURL
 	}
 	defer resp.Body.Close()
 
@@ -41,16 +44,14 @@ func ScrapeForImagePrice(url string) (string, string, error) {
 		return imageURL, price, errors.New("can't read body")
 	}
 
-	assets.GetImage(bodyBytes)
-
-	i, err := assets.GetImage(bodyBytes)
+	i, err := getter.GetImage(bodyBytes)
 	if err != nil {
 		return imageURL, price, fmt.Errorf("could not get image: %w", err)
 	}
 
 	imageURL = i
 
-	p, err := assets.GetPrice(bodyBytes)
+	p, err := getter.GetPrice(bodyBytes)
 	if err != nil {
 		return imageURL, price, fmt.Errorf("could not get price: %w", err)
 	}
