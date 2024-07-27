@@ -1,0 +1,17 @@
+# .air.toml
+[build]
+cmd = "make build"
+bin = "./build/api-service"
+include_ext = ["go"]
+exclude_dir = ["vendor"]
+
+[watch]
+  # Directories to watch
+  paths = [
+    ".",
+    "../shared"
+  ]
+
+[logger]
+time = true
+color = true
