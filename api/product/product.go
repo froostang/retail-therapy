@@ -1,16 +1,29 @@
 package product
 
-import "github.com/froostang/retail-therapy/shared/scraper"
+import (
+	"github.com/froostang/retail-therapy/api/logging"
+	"github.com/froostang/retail-therapy/shared/scraper"
+	"github.com/froostang/retail-therapy/shared/scraper/assets"
+)
 
 type Requester interface {
-	Scrape(string) Scraped
+	Scrape(string) (*Scraped, error)
 }
 
-type ScraperRequest struct {
+type ScrapeRequester struct {
+	logger logging.Logger
 }
 
-func (s *ScraperRequest) Scrape(url string) (*Scraped, error) {
-	i, p, err := scraper.ScrapeForImagePrice(url)
+func NewScrapeRequester(logger logging.Logger) *ScrapeRequester {
+	return &ScrapeRequester{
+		logger: logger,
+	}
+}
+
+func (s *ScrapeRequester) Scrape(url string) (*Scraped, error) {
+
+	s.logger.Info(url)
+	i, p, err := scraper.ScrapeForImagePrice(url, assets.Getter{})
 	if err != nil {
 		return nil, err
 	}
