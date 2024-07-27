@@ -49,7 +49,7 @@ func extractTokenFromHeader(r *http.Request) string {
 func validateToken(tokenString string) (*jwt.Token, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		// Validate the token signing method here
-		return []byte("your-secret-key"), nil
+		return []byte("my-secret-key"), nil
 	})
 
 	if err != nil {

@@ -24,6 +24,11 @@ func NewServer(logger *zap.Logger) {
 		http.HandlerFunc(shoppingManager.ShoppingHandler),
 		middleware.PanicRecovery))
 
+	AdderManager := handlers.NewAdderManager(loggers.NewZapLogger(logger))
+	http.Handle("/add-product", middleware.Apply(
+		http.HandlerFunc(AdderManager.AdderHandler),
+		middleware.PanicRecovery))
+
 	fmt.Println("Server is running on port 8080")
 	http.ListenAndServe(":8080", nil)
 }

@@ -9,6 +9,7 @@ import (
 
 	"github.com/froostang/retail-therapy/api/logging"
 	"github.com/froostang/retail-therapy/api/product"
+	"github.com/froostang/retail-therapy/shared/loggers"
 )
 
 // Define the AddProduct struct
@@ -27,19 +28,28 @@ func (ad *AdderData) ToRequest() *addRequest {
 	}
 }
 
+type cacheVal struct {
+	url     string
+	product product.Scraped
+}
+
 type Adder struct {
-	cache  map[string]product.Scraped
+	cache  []cacheVal
 	logger logging.Logger
 }
 
 func (a *Adder) insert(url string, p product.Scraped) {
-	a.cache[url] = p
+	if len(a.cache) >= 100 {
+		a.cache = a.cache[50:]
+	}
+
+	a.cache = append(a.cache, cacheVal{url: url, product: p})
 }
 
-func NewAdderManager(logger logging.Logger) *Adder {
+func NewAdderManager(logger *loggers.ZapLogger) *Adder {
 	return &Adder{
 		logger: logger,
-		cache:  make(map[string]product.Scraped, 100),
+		cache:  make([]cacheVal, 0, 100),
 	}
 }
 
@@ -65,10 +75,14 @@ func (sm *Adder) AdderHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ps := product.Scraped
+	ar := addData.ToRequest()
+
+	// TODO: scrape function on ar.URL
+	// insert
+	sm.insert(ar.URL, product.Scraped{Name: "test"})
 
 	// Respond to the client
-	responseMessage := fmt.Sprintf("Received your message: %s", ps)
+	responseMessage := fmt.Sprintf("Received your message: %s", ar.URL)
 	w.Header().Set("Content-Type", "text/plain")
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(responseMessage))
