@@ -2,10 +2,7 @@ package handlers
 
 import (
 	"fmt"
-	"html/template"
 	"net/http"
-	"os"
-	"path/filepath"
 
 	"github.com/froostang/retail-therapy/api/cache"
 	"github.com/froostang/retail-therapy/api/logging"
@@ -55,19 +52,10 @@ func (sm *ShoppingManager) ShoppingHandler(w http.ResponseWriter, r *http.Reques
 		panic("no logger")
 	}
 
-	// stockImg := "https://images.unsplash.com/photo-1591279304068-c997c097f2b7?q=80&w=2970&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-
-	// products := []product.Scraped{{Name: "test1", ImageURL: stockImg}, {Name: "test2", ImageURL: stockImg}}
-
 	products := sm.cache.Get()
-	ex, err := os.Executable()
-	if err != nil {
-		panic(err)
-	}
-	exPath := filepath.Dir(ex)
 
 	// TODO: fix directory structure issues with templates
-	tmpl, err := template.ParseFiles(exPath + "/templates/shop.html")
+	tmpl, err := getTemplate("shop.html")
 	if err != nil {
 		// TODO: fix nil logger bug (try delve?)
 		// sm.logger.Error("template", (err))

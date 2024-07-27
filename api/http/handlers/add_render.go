@@ -1,62 +1,46 @@
 package handlers
 
 import (
-	"html/template"
 	"net/http"
 )
 
 func AdderRenderHandler(w http.ResponseWriter, r *http.Request) {
-	tmpl := `
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Add Product</title>
-    <script src="https://unpkg.com/htmx.org@1.9.4/dist/htmx.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            document.getElementById('addProductForm').addEventListener('submit', function (event) {
-                event.preventDefault(); // Prevent the default form submission
-
-                // Collect the input data
-                const inputField = document.querySelector('input[name="location"]');
-                const data = {
-                    url: inputField.value
-                };
-
-                // Send a POST request with JSON body using fetch
-                fetch('/add', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                })
-                .then(response => response.text())
-                .then(text => {
-                    document.getElementById('response').innerHTML = text;
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-            });
-        });
-    </script>
-</head>
-<body>
-    <h1>Add Product Location</h1>
-    <form id="addProductForm">
-        <input type="text" name="location" placeholder="Enter location" required />
-        <button type="submit">Add</button>
-    </form>
-    <div id="response"></div>
-</body>
-</html>
-`
 	// TODO: get template helper and use file
-	t, err := template.New("webpage").Parse(tmpl)
+	// t, err := template.New("webpage").Parse(tmpl)
+
+	t, err := getTemplate("add_updated.html")
 	if err != nil {
 		http.Error(w, "Failed to parse template", http.StatusInternalServerError)
 		return
 	}
+
+	// Construct the full file paths relative to the current working directory
+	// TODO: still need to universally fix pathing
+	// basePath, err := filepath.Abs("build/templates/base.html")
+	// if err != nil {
+	// 	log.Fatalf("Error getting absolute path for base template: %v", err)
+	// }
+	// formPath, err := filepath.Abs("build/templates/form.html")
+	// if err != nil {
+	// 	log.Fatalf("Error getting absolute path for form template: %v", err)
+	// }
+
+	// t, err := template.New("").ParseFiles(basePath, formPath)
+	// if err != nil {
+	// 	http.Error(w, "Internal Server Error: "+err.Error(), http.StatusInternalServerError)
+	// }
+
+	// t := template.Must(template.New("base").ParseFiles("add_container.html", "add_form.html"))
 	t.Execute(w, nil)
+	// data := struct {
+	// 	Title string
+	// }{
+	// 	Title: "Add Product",
+	// }
+
+	// // Render the base template with the embedded form template
+	// err = t.ExecuteTemplate(w, "build/templates/base", data)
+	// if err != nil {
+	// 	http.Error(w, "Internal Server Error: "+err.Error(), http.StatusInternalServerError)
+	// }
 }

@@ -42,3 +42,7 @@
 - consider authentication/authorization through managed service? auth0?
 - or internal IdP with JWT
 
+
+## Stretch Goals or Future Improvement
+- rate limiting maybe in service/code (but can be done at http level though (e.g., nginx, cloudflare))
+- categories for cached items to make the site more like a real ecommerce thing
