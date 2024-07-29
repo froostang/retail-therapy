@@ -23,14 +23,15 @@ func NewScrapeRequester(logger logging.Logger) *ScrapeRequester {
 func (s *ScrapeRequester) Scrape(url string) (*Scraped, error) {
 
 	s.logger.Info(url)
-	i, p, err := scraper.ScrapeForImagePrice(url, assets.Getter{})
+	result, err := scraper.Scrape(url, assets.Getter{})
 	if err != nil {
 		return nil, err
 	}
 	return &Scraped{
-		ImageURL: i,
-		Price:    p,
-		Name:     "test",
+		ImageURL:    result.Image,
+		Price:       result.Price,
+		Name:        result.Name,
+		Description: result.Description,
 	}, nil
 }
 

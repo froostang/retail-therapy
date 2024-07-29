@@ -28,11 +28,6 @@ func (ad *AdderData) ToRequest() *addRequest {
 	}
 }
 
-type cacheVal struct {
-	url     string
-	product product.Scraped
-}
-
 type Adder struct {
 	cache     *cache.Products
 	logger    logging.Logger

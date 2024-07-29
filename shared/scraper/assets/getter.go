@@ -49,3 +49,43 @@ func (g Getter) GetPrice(body []byte) (float64, error) {
 
 	return price, nil
 }
+
+func (g Getter) GetName(body []byte) (string, error) {
+
+	var name string
+	r := bytes.NewReader(body)
+
+	// Parse the HTML response
+	doc, err := goquery.NewDocumentFromReader(r)
+	if err != nil {
+		return name, fmt.Errorf("name goquery failed: %w", err)
+	}
+
+	// Extract image URL
+	name = doc.Find("#pdp-product-title-id").Text()
+	if name == "" {
+		return name, errors.New("name source doesn't exist")
+	}
+
+	return name, nil
+}
+
+func (g Getter) GetDescription(body []byte) (string, error) {
+
+	var desc string
+	r := bytes.NewReader(body)
+
+	// Parse the HTML response
+	doc, err := goquery.NewDocumentFromReader(r)
+	if err != nil {
+		return desc, fmt.Errorf("name goquery failed: %w", err)
+	}
+
+	// Extract image URL
+	desc = doc.Find(`[data-test="item-details-description"]`).Text()
+	if desc == "" {
+		return desc, errors.New("name source doesn't exist")
+	}
+
+	return desc, nil
+}

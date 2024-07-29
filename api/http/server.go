@@ -29,6 +29,10 @@ func NewServer(logger *zap.Logger) {
 		http.HandlerFunc(shoppingManager.ShoppingHandler),
 		middleware.PanicRecovery))
 
+	http.Handle("/checkout", middleware.Apply(
+		http.HandlerFunc(shoppingManager.CheckoutRenderHandler),
+		middleware.PanicRecovery))
+
 	// Add POST
 	AdderManager := handlers.NewAdderManager(loggers.NewZapLogger(logger), globalProductCache)
 	http.Handle("/add", middleware.Apply(

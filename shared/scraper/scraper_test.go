@@ -27,6 +27,16 @@ func (m *MockAssetGetter) GetPrice(body []byte) (float64, error) {
 	return args.Get(0).(float64), args.Error(1)
 }
 
+func (m *MockAssetGetter) GetName(body []byte) (string, error) {
+	args := m.Called(body)
+	return args.String(0), args.Error(1)
+}
+
+func (m *MockAssetGetter) GetDescription(body []byte) (string, error) {
+	args := m.Called(body)
+	return args.String(0), args.Error(1)
+}
+
 // TestIsTargetURL tests the isTargetURL function
 func TestIsTargetURL(t *testing.T) {
 	tests := []struct {
@@ -63,24 +73,28 @@ func TestScrapeForImagePrice(t *testing.T) {
 	// Mock the AssetGetter interface
 	mockGetter := new(MockAssetGetter)
 	mockGetter.On("GetImage", mock.Anything).Return("http://example.com/image.jpg", nil)
+	mockGetter.On("GetName", mock.Anything).Return("test", nil)
 	mockGetter.On("GetPrice", mock.Anything).Return(10.99, nil)
+	mockGetter.On("GetDescription", mock.Anything).Return("this is a test thingy", nil)
 
 	tests := []struct {
 		url              string
 		expectedImageURL string
 		expectedPrice    string
+		expectedName     string
+		expectedDesc     string
 		expectedError    error
 	}{
-		{"http://www.target.com/expected-path", "http://example.com/image.jpg", "10.99", nil},
-		{"http://www.not-target.com/expected-path", "", "", ErrBadURL},
-		{ts.URL + "/unexpected-path", "", "", ErrBadURL},
+		{"http://www.target.com/expected-path", "http://example.com/image.jpg", "10.99", "test", "this is a test thingy", nil},
+		{"http://www.not-target.com/expected-path", "", "", "", "", ErrBadURL},
+		{ts.URL + "/unexpected-path", "", "", "", "", ErrBadURL},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.url, func(t *testing.T) {
-			imageURL, price, err := ScrapeForImagePrice(tt.url, mockGetter)
-			assert.Equal(t, tt.expectedImageURL, imageURL)
-			assert.Equal(t, tt.expectedPrice, price)
+			result, err := Scrape(tt.url, mockGetter)
+			assert.Equal(t, tt.expectedImageURL, result.Image)
+			assert.Equal(t, tt.expectedPrice, result.Price)
 			assert.ErrorIs(t, tt.expectedError, err)
 		})
 	}

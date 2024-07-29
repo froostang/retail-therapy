@@ -20,42 +20,62 @@ func isTargetURL(str string) bool {
 type AssetGetter interface {
 	GetImage(body []byte) (string, error)
 	GetPrice(body []byte) (float64, error)
+	GetName(body []byte) (string, error)
+	GetDescription(body []byte) (string, error)
+}
+
+type Result struct {
+	Image       string
+	Price       string
+	Name        string
+	Description string
 }
 
 // ScrapeForImagePrice uses AssetGetter to fetch image and price
-func ScrapeForImagePrice(url string, getter AssetGetter) (string, string, error) {
+func Scrape(url string, getter AssetGetter) (Result, error) {
 
-	var imageURL, price string
+	result := Result{}
 
 	if !isTargetURL(url) {
-		return imageURL, price, ErrBadURL
+		return result, ErrBadURL
 	}
 
 	sanitized := html.EscapeString(url)
 
 	resp, err := http.Get(sanitized)
 	if err != nil {
-		return imageURL, price, ErrBadURL
+		return result, ErrBadURL
 	}
 	defer resp.Body.Close()
 
 	bodyBytes, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return imageURL, price, errors.New("can't read body")
+		return result, errors.New("can't read body")
 	}
 
 	i, err := getter.GetImage(bodyBytes)
 	if err != nil {
-		return imageURL, price, fmt.Errorf("could not get image: %w", err)
+		return result, fmt.Errorf("could not get image: %w", err)
 	}
-
-	imageURL = i
+	result.Image = i
 
 	p, err := getter.GetPrice(bodyBytes)
 	if err != nil {
-		return imageURL, price, fmt.Errorf("could not get price: %w", err)
+		return result, fmt.Errorf("could not get price: %w", err)
 	}
+	result.Price = fmt.Sprintf("%.2f", p)
 
-	price = fmt.Sprintf("%.2f", p)
-	return imageURL, price, nil
+	n, err := getter.GetName(bodyBytes)
+	if err != nil {
+		return result, fmt.Errorf("could not get name: %w", err)
+	}
+	result.Name = n
+
+	d, err := getter.GetDescription(bodyBytes)
+	if err != nil {
+		return result, fmt.Errorf("could not get description: %w", err)
+	}
+	result.Description = d
+
+	return result, nil
 }

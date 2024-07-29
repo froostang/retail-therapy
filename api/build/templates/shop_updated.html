@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Website</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        
+        .navbar {
+            background-color: #232f3e;
+            color: white;
+            overflow: hidden;
+        }
+
+        .navbar a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 20px;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .navbar a:hover {
+            background-color: #ddd;
+            color: #000;
+        }
+
+        .navbar .icon {
+            float: right;
+            font-size: 20px;
+            padding: 14px 20px;
+        }
+
+        header {
+            background-color: #232f3e;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .product {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+
+        .product img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        .product h2 {
+            color: #333;
+        }
+
+        .product p {
+            color: #666;
+        }
+
+        .purchase-button {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .purchase-button:hover {
+            background-color: #218838;
+        }
+
+        footer {
+            background-color: #232f3e;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <a href="/shop">Shop</a>
+        <a href="/add-product">Add Product</a>
+        <a href="/about">About</a>
+        <a href="/checkout" class="icon"><i class="fas fa-shopping-cart"></i></a>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <h1>Welcome, {{.User.Name}}!</h1>
+        <p>Email: {{.User.Email}}</p>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        {{range .Products}}
+        <div class="product">
+            <img src="{{.ImageURL}}" alt="Product Image">
+            <h2>{{.Name}}</h2>
+            <p>{{.Description}}</p>
+            <p>Price: ${{.Price}}</p>
+            <button class="purchase-button">Purchase</button>
+        </div>
+        {{end}}
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        &copy; 2024 Froostang
+    </footer>
+</body>
+</html>

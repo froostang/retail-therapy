@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Your Shopping Cart</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://unpkg.com/htmx.org@1.9.4/dist/htmx.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .navbar {
+            background-color: #232f3e;
+            color: white;
+            overflow: hidden;
+        }
+
+        .navbar a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 20px;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .navbar a:hover {
+            background-color: #ddd;
+            color: #000;
+        }
+
+        .navbar .icon {
+            float: right;
+            font-size: 20px;
+            padding: 14px 20px;
+        }
+
+        header {
+            background-color: #232f3e;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .product-item {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .product-item img {
+            max-width: 60px;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        .product-item h2 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .product-item p {
+            margin: 5px 0;
+            color: #666;
+        }
+
+        .total {
+            font-weight: bold;
+            margin-top: 20px;
+            text-align: right;
+        }
+
+        .checkout-form {
+            margin-top: 20px;
+        }
+
+        .checkout-form label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        .checkout-form input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .checkout-form button {
+            background-color: #ff9900;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .checkout-form button:hover {
+            background-color: #e68a00;
+        }
+
+        footer {
+            background-color: #232f3e;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <a href="/shopping">Shopping</a>
+        <a href="/add-product">Add Product</a>
+        <a href="/about">About</a>
+        <a href="/checkout" class="icon"><i class="fas fa-shopping-cart"></i></a>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <h1>Checkout</h1>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h2>Order Summary</h2>
+        <div id="products">
+            <!-- Product items will be populated here using htmx or server-side rendering -->
+            {{range .Products}}
+            <div class="product-item">
+                <img src="{{.ImageURL}}" alt="Product Image">
+                <div>
+                    <h2>{{.Name}}</h2>
+                    <p>Price: ${{.Price}}</p>
+                </div>
+            </div>
+            {{end}}
+        </div>
+
+        <div class="total">
+            <p>Subtotal: ${{.Subtotal}}</p>
+            <p>Tax (7%): ${{.Tax}}</p>
+            <p>Total: ${{.Total}}</p>
+        </div>
+
+        <!-- Checkout Form -->
+        <form class="checkout-form" hx-post="/process-checkout" hx-target="#response">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="card-name">Name on Card:</label>
+            <input type="text" id="card-name" name="card-name" required>
+
+            <label for="card-number">Card Number:</label>
+            <input type="text" id="card-number" name="card-number" required>
+
+            <label for="expiry-date">Expiry Date:</label>
+            <input type="text" id="expiry-date" name="expiry-date" placeholder="MM/YY" required>
+
+            <label for="cvv">CVV:</label>
+            <input type="text" id="cvv" name="cvv" required>
+
+            <button type="submit">Complete Purchase</button>
+        </form>
+    </div>
+
+    <!-- Response div for HTMX -->
+    <div id="response"></div>
+
+    <!-- Footer -->
+    <footer>
+        &copy; 2024 Froostang
+    </footer>
+</body>
+</html>
