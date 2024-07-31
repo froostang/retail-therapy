@@ -15,11 +15,12 @@ var (
 )
 
 type ShoppingData struct {
-	User     user.User
-	Products []product.Scraped
-	Total    string
-	Tax      string
-	Subtotal string
+	User          user.User
+	Products      []product.Scraped // Replace with your actual product type
+	Tax           string
+	Total         string
+	Subtotal      string
+	CartItemCount int
 }
 
 type ShoppingManager struct {

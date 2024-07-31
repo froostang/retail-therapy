@@ -33,20 +33,27 @@ func (sm *ShoppingManager) getTotals() totals {
 	result.Tax = fmt.Sprintf("%.2f", total-subtotal)
 
 	return result
-
 }
 
 func (sm *ShoppingManager) CheckoutRenderHandler(w http.ResponseWriter, r *http.Request) {
-
-	t, err := getTemplate("checkout_updated.html")
+	t, err := getTemplate("checkout_updated.gohtml")
 	if err != nil {
 		http.Error(w, "Failed to parse template", http.StatusInternalServerError)
 		return
 	}
 
 	totals := sm.getTotals()
-	err = t.Execute(w, ShoppingData{User: user.User{Name: "checkout man"}, Products: sm.cart.GetAll(),
-		Tax: totals.Tax, Total: totals.Total, Subtotal: totals.Subtotal})
+	cartContents := sm.cart.GetAll()
+	cartItemCount := len(cartContents)
+
+	err = t.Execute(w, ShoppingData{
+		User:          user.User{Name: "checkout man"},
+		Products:      cartContents,
+		Tax:           totals.Tax,
+		Total:         totals.Total,
+		Subtotal:      totals.Subtotal,
+		CartItemCount: cartItemCount,
+	})
 	if err != nil {
 		fmt.Println(err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
