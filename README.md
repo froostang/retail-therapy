@@ -9,3 +9,7 @@ Variables
     BUILD_DIR: Directory where the binary executable will be generated.
     OS: Target operating system (Ubuntu).
     ARCH: Target architecture (64-bit).
+
+
+
+- For dev work: just run the command `air` while in /api to read from the `.air.toml`
