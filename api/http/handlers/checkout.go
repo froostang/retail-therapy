@@ -38,7 +38,7 @@ func (sm *ShoppingManager) getTotals() totals {
 
 func (sm *ShoppingManager) CheckoutRenderHandler(w http.ResponseWriter, r *http.Request) {
 
-	t, err := getTemplate("checkout.html")
+	t, err := getTemplate("checkout_updated.html")
 	if err != nil {
 		http.Error(w, "Failed to parse template", http.StatusInternalServerError)
 		return

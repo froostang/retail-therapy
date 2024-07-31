@@ -1,15 +1,18 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
 	"html"
 	"net/http"
 )
 
+// CartData represents the data structure for the cart item
 type CartData struct {
 	Name string `json:"name"`
 }
 
+// CartHandler processes the addition of an item to the cart
 func (sm *ShoppingManager) CartHandler(w http.ResponseWriter, r *http.Request) {
 	// Check if the request method is POST
 	if r.Method != http.MethodPost {
@@ -34,8 +37,17 @@ func (sm *ShoppingManager) CartHandler(w http.ResponseWriter, r *http.Request) {
 	// Decode HTML entities
 	decodedName := html.UnescapeString(name)
 
-	sm.logger.Info(decodedName)
-
+	// Insert item into cart (assuming this function updates the cart in some way)
 	sm.cart.Insert(decodedName, sm.cache.Get(decodedName))
 
+	// Get the updated cart count
+	cartCount := len(sm.cart.GetAll())
+
+	// Respond with the updated cart count as JSON
+	response := map[string]int{"count": cartCount}
+	w.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(response)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Failed to encode response as JSON: %v", err), http.StatusInternalServerError)
+	}
 }

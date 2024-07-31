@@ -14,21 +14,26 @@
             padding: 0;
             background-color: #f4f4f4;
         }
-        
+
         .navbar {
             background-color: #232f3e;
             color: white;
-            overflow: hidden;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            box-sizing: border-box; /* Ensure padding is included in width calculation */
+            overflow: hidden; /* Prevent overflowing content */
         }
 
         .navbar a {
-            float: left;
-            display: block;
             color: white;
             text-align: center;
             padding: 14px 20px;
             text-decoration: none;
             font-size: 16px;
+            white-space: nowrap; /* Prevent text from wrapping */
         }
 
         .navbar a:hover {
@@ -36,23 +41,28 @@
             color: #000;
         }
 
-        .navbar .icon {
-            float: right;
-            font-size: 20px;
-            padding: 14px 20px;
-            position: relative; /* For positioning the badge */
+        .icon {
+            position: relative;
         }
 
-        .icon-badge {
+        .badge {
             position: absolute;
             top: -10px;
             right: -10px;
-            background-color: #f00;
-            color: #fff;
+            background-color: #e94e77;
+            color: white;
             border-radius: 50%;
             padding: 5px 10px;
             font-size: 12px;
-            display: none; /* Hidden by default */
+            font-weight: bold;
+            min-width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+            white-space: nowrap;
+            overflow: hidden; /* Prevent content from spilling out */
         }
 
         header {
@@ -81,9 +91,10 @@
         }
 
         .product img {
-            max-width: 100%;
+            max-width: 150px; /* Limit the maximum width of the image */
             height: auto;
             border-radius: 5px;
+            margin-bottom: 10px; /* Add space below the image */
         }
 
         .product h2 {
@@ -128,7 +139,7 @@
         <a href="/about">About</a>
         <a href="/checkout" class="icon">
             <i class="fas fa-shopping-cart"></i>
-            <span id="cart-badge" class="icon-badge">0</span> <!-- Cart badge -->
+            <span id="cart-badge" class="badge" style="display:none;">0</span>
         </a>
     </div>
 
@@ -151,9 +162,8 @@
                 hx-post="/add-cart"
                 hx-trigger="click"
                 hx-target="#cart-notification"
-                hx-swap="innerHTML"
-                hx-vals='{"name": "{{.Name}}"}'
-                hx-on="htmx:afterSwap:changeCartBadge">
+                hx-swap="none"
+                hx-vals='{"name": "{{.Name}}"}'>
                 Add to Cart
             </button>
         </div>
@@ -169,19 +179,24 @@
     <div id="cart-notification"></div>
 
     <script>
-        // Function to update cart badge
-        function updateCartBadge(count) {
-            const badge = document.getElementById('cart-badge');
-            badge.textContent = count;
-            badge.style.display = count > 0 ? 'block' : 'none';
-        }
-
-        // HTMX event listener for afterSwap
-        document.addEventListener('htmx:afterSwap', function(event) {
+        document.addEventListener('htmx:afterRequest', function(event) {
             if (event.detail.target.id === 'cart-notification') {
-                // Assuming the response from /add-cart includes the new cart count
-                const newCount = parseInt(event.detail.target.innerHTML);
-                updateCartBadge(newCount);
+                // Parse the JSON response
+                try {
+                    const response = JSON.parse(event.detail.xhr.responseText);
+                    const newCount = response.count;
+                    const badge = document.getElementById('cart-badge');
+                    
+                    // Update the cart badge visibility and text
+                    if (newCount > 0) {
+                        badge.style.display = 'flex'; // Use flex to center the text
+                        badge.textContent = newCount;
+                    } else {
+                        badge.style.display = 'none';
+                    }
+                } catch (e) {
+                    console.error('Error parsing JSON response:', e);
+                }
             }
         });
     </script>

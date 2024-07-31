@@ -23,7 +23,6 @@ func NewServer(logger *zap.Logger) {
 	globalProductCache = cache.NewForProducts(loggers.NewZapLogger(logger), 100)
 	globalCart = cache.NewForProducts(loggers.NewZapLogger(logger), 100)
 
-	// TODO: just let it inline it
 	shoppingManager := &handlers.ShoppingManager{}
 	shoppingManager = handlers.NewShoppingManager(shoppingManager,
 		handlers.AddLogger(loggers.NewZapLogger(logger)),
@@ -42,6 +41,10 @@ func NewServer(logger *zap.Logger) {
 
 	http.Handle("/checkout", middleware.Apply(
 		http.HandlerFunc(shoppingManager.CheckoutRenderHandler),
+		middleware.PanicRecovery))
+
+	http.Handle("/complete", middleware.Apply(
+		http.HandlerFunc(shoppingManager.CompleteHandler),
 		middleware.PanicRecovery))
 
 	// Add POST

@@ -10,6 +10,7 @@ type ProductCacher interface {
 	Insert(string, product.Scraped)
 	Get(string) product.Scraped
 	GetAll() []product.Scraped
+	Clear()
 }
 
 // TODO: This cache stuff should live in shared module
@@ -74,4 +75,8 @@ func (p *Products) Get(key string) product.Scraped {
 	}
 
 	return product.Scraped{}
+}
+
+func (p *Products) Clear() {
+	p.values = make([]cacheVal, 0, p.max)
 }
