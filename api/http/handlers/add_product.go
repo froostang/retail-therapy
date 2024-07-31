@@ -6,7 +6,7 @@ import (
 
 func AdderRenderHandler(w http.ResponseWriter, r *http.Request) {
 
-	t, err := getTemplate("add_product.html")
+	t, err := GetTemplate(TemplateFS, "add_product.html")
 	if err != nil {
 		http.Error(w, "Failed to parse template", http.StatusInternalServerError)
 		return

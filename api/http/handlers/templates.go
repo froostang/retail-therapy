@@ -1,20 +1,20 @@
 package handlers
 
 import (
+	"embed"
 	"html/template"
-	"os"
-	"path/filepath"
 )
 
-func getTemplate(name string) (*template.Template, error) {
-	ex, err := os.Executable()
-	if err != nil {
-		return nil, err
-	}
-	exPath := filepath.Dir(ex)
+var TemplateFS embed.FS
 
-	// TODO: fix directory structure issues with templates
-	tmpl, err := template.ParseFiles(exPath + "/templates/" + name)
+func SetTemplates(fs embed.FS) {
+	TemplateFS = fs
+}
+
+func GetTemplate(fs embed.FS, name string) (*template.Template, error) {
+
+	// TODO: fix directory structure issues with templates?
+	tmpl, err := template.ParseFS(fs, "build/templates/"+name)
 	if err != nil {
 		return nil, err
 	}

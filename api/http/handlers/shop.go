@@ -72,7 +72,7 @@ func (sm *ShoppingManager) ShoppingHandler(w http.ResponseWriter, r *http.Reques
 	products := sm.cache.GetAll()
 
 	// TODO: fix directory structure issues with templates
-	tmpl, err := getTemplate("shop.html")
+	tmpl, err := GetTemplate(TemplateFS, "shop.html")
 	if err != nil {
 		// TODO: fix nil logger bug (try delve?)
 		// sm.logger.Error("template", (err))

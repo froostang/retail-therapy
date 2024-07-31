@@ -6,7 +6,7 @@ import (
 
 func AboutRenderHandler(w http.ResponseWriter, r *http.Request) {
 
-	t, err := getTemplate("about.html")
+	t, err := GetTemplate(TemplateFS, "about.html")
 	if err != nil {
 		http.Error(w, "Failed to parse template", http.StatusInternalServerError)
 		return

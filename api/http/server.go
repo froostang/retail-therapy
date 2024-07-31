@@ -1,6 +1,7 @@
 package http
 
 import (
+	"embed"
 	"fmt"
 	"net/http"
 
@@ -14,10 +15,11 @@ import (
 var (
 	globalProductCache *cache.Products
 	globalCart         *cache.Products
+	TemplateFS         embed.FS
 )
 
-func NewServer(logger *zap.Logger) {
-
+func NewServer(logger *zap.Logger, templates embed.FS) {
+	handlers.SetTemplates(templates)
 	// TODO: Apply JWT middleware to all routes middleware.JWTMiddleware
 	logger.Info("registering handlers")
 	globalProductCache = cache.NewForProducts(loggers.NewZapLogger(logger), 100)

@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"embed"
 	"fmt"
 	"os"
 
@@ -8,6 +9,8 @@ import (
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
 )
+
+var template embed.FS
 
 var rootCmd = &cobra.Command{
 	Use:   "my-service",
@@ -18,13 +21,14 @@ var rootCmd = &cobra.Command{
 
 		logger.Info("Service starting")
 
-		http.NewServer(logger)
+		http.NewServer(logger, template)
 		// Your main service logic here
 		logger.Info("Service stopped")
 	},
 }
 
-func Execute() {
+func Execute(templates embed.FS) {
+	template = templates
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
