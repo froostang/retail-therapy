@@ -11,22 +11,33 @@ import (
 	"go.uber.org/zap"
 )
 
-var globalProductCache *cache.Products
+var (
+	globalProductCache *cache.Products
+	globalCart         *cache.Products
+)
 
 func NewServer(logger *zap.Logger) {
 
 	// TODO: Apply JWT middleware to all routes middleware.JWTMiddleware
 	logger.Info("registering handlers")
 	globalProductCache = cache.NewForProducts(loggers.NewZapLogger(logger), 100)
+	globalCart = cache.NewForProducts(loggers.NewZapLogger(logger), 100)
 
 	// TODO: just let it inline it
 	shoppingManager := &handlers.ShoppingManager{}
 	shoppingManager = handlers.NewShoppingManager(shoppingManager,
-		handlers.AddLogger(loggers.NewZapLogger(logger)), handlers.AddCacher(globalProductCache))
+		handlers.AddLogger(loggers.NewZapLogger(logger)),
+		handlers.AddCacher(globalProductCache),
+		handlers.AddCart(globalCart))
 
 	// Shop view
 	http.Handle("/shop", middleware.Apply(
 		http.HandlerFunc(shoppingManager.ShoppingHandler),
+		middleware.PanicRecovery))
+
+	// Cart add
+	http.Handle("/add-cart", middleware.Apply(
+		http.HandlerFunc(shoppingManager.CartHandler),
 		middleware.PanicRecovery))
 
 	http.Handle("/checkout", middleware.Apply(

@@ -105,13 +105,51 @@
             bottom: 0;
             width: 100%;
         }
+
+        /* Modal styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* Could be more or less, depending on screen size */
+            max-width: 600px;
+            border-radius: 5px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <!-- Navigation Bar -->
     <div class="navbar">
         <a href="/shop">Shop</a>
-        <a href="/add-product">Add Product</a>
+        <a href="#" hx-get="/add-product" hx-target="#modal-content" hx-trigger="click" hx-swap="innerHTML">Add Product</a>
         <a href="/about">About</a>
         <a href="/checkout" class="icon"><i class="fas fa-shopping-cart"></i></a>
     </div>
@@ -123,7 +161,7 @@
     </header>
 
     <!-- Main Content -->
-    <div class="container">
+    <div class="container" id="product-list">
         {{range .Products}}
         <div class="product">
             <img src="{{.ImageURL}}" alt="Product Image">
@@ -148,7 +186,41 @@
         &copy; 2024 Froostang
     </footer>
 
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div id="modal-content" class="modal-content">
+            <!-- Content will be injected here -->
+        </div>
+    </div>
+
     <!-- Notification area for cart actions -->
     <div id="cart-notification"></div>
+
+    <script>
+        document.addEventListener('htmx:afterSwap', function(event) {
+            if (event.detail.target.id === 'modal-content') {
+                // Show the modal when content is loaded
+                document.getElementById('modal').style.display = 'block';
+            } else if (event.detail.target.id === 'product-list') {
+                // Refresh product list if necessary
+                const productListDiv = document.getElementById('product-list');
+                productListDiv.innerHTML = event.detail.target.innerHTML;
+            }
+        });
+
+        // Close the modal when clicking outside of the modal content
+        window.onclick = function(event) {
+            if (event.target === document.getElementById('modal')) {
+                document.getElementById('modal').style.display = 'none';
+            }
+        };
+
+        // Close the modal when clicking on the 'close' button
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('close')) {
+                document.getElementById('modal').style.display = 'none';
+            }
+        });
+    </script>
 </body>
 </html>

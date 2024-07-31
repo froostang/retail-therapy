@@ -34,8 +34,8 @@ type Adder struct {
 	requester product.Requester
 }
 
-func (a *Adder) insert(url string, p product.Scraped) {
-	a.cache.Insert(url, p)
+func (a *Adder) insert(key string, p product.Scraped) {
+	a.cache.Insert(key, p)
 }
 
 func NewAdderManager(logger *loggers.ZapLogger, c *cache.Products) *Adder {

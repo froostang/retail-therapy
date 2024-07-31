@@ -10,14 +10,24 @@ import (
 	"github.com/froostang/retail-therapy/api/user"
 )
 
+var (
+	defaultTaxRate = 0.07
+)
+
 type ShoppingData struct {
 	User     user.User
 	Products []product.Scraped
+	Total    string
+	Tax      string
+	Subtotal string
 }
 
 type ShoppingManager struct {
 	logger logging.Logger
 	cache  cache.ProductCacher
+
+	// TODO: per user/session
+	cart cache.ProductCacher
 }
 
 type optFunc func(sm *ShoppingManager)
@@ -31,6 +41,12 @@ func AddLogger(logger logging.Logger) optFunc {
 func AddCacher(c cache.ProductCacher) optFunc {
 	return func(sm *ShoppingManager) {
 		sm.cache = c
+	}
+}
+
+func AddCart(c cache.ProductCacher) optFunc {
+	return func(sm *ShoppingManager) {
+		sm.cart = c
 	}
 }
 
@@ -52,10 +68,10 @@ func (sm *ShoppingManager) ShoppingHandler(w http.ResponseWriter, r *http.Reques
 		panic("no logger")
 	}
 
-	products := sm.cache.Get()
+	products := sm.cache.GetAll()
 
 	// TODO: fix directory structure issues with templates
-	tmpl, err := getTemplate("shop_updated.html")
+	tmpl, err := getTemplate("shop_cart.html")
 	if err != nil {
 		// TODO: fix nil logger bug (try delve?)
 		// sm.logger.Error("template", (err))

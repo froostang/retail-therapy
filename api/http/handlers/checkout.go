@@ -3,13 +3,40 @@ package handlers
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/froostang/retail-therapy/api/user"
 )
 
+type totals struct {
+	Total    string
+	Tax      string
+	Subtotal string
+}
+
+func (sm *ShoppingManager) getTotals() totals {
+	result := totals{}
+	cartContents := sm.cart.GetAll()
+
+	var subtotal float64
+	for _, item := range cartContents {
+		s, err := strconv.ParseFloat(item.Price, 64)
+		if err != nil {
+			return result
+		}
+		subtotal += s
+	}
+
+	result.Subtotal = fmt.Sprintf("%.2f", subtotal)
+	total := subtotal + subtotal*defaultTaxRate
+	result.Total = fmt.Sprintf("%.2f", total)
+	result.Tax = fmt.Sprintf("%.2f", total-subtotal)
+
+	return result
+
+}
+
 func (sm *ShoppingManager) CheckoutRenderHandler(w http.ResponseWriter, r *http.Request) {
-	// TODO: get template helper and use file
-	// t, err := template.New("webpage").Parse(tmpl)
 
 	t, err := getTemplate("checkout.html")
 	if err != nil {
@@ -17,38 +44,12 @@ func (sm *ShoppingManager) CheckoutRenderHandler(w http.ResponseWriter, r *http.
 		return
 	}
 
-	// Construct the full file paths relative to the current working directory
-	// TODO: still need to universally fix pathing
-	// basePath, err := filepath.Abs("build/templates/base.html")
-	// if err != nil {
-	// 	log.Fatalf("Error getting absolute path for base template: %v", err)
-	// }
-	// formPath, err := filepath.Abs("build/templates/form.html")
-	// if err != nil {
-	// 	log.Fatalf("Error getting absolute path for form template: %v", err)
-	// }
-
-	// t, err := template.New("").ParseFiles(basePath, formPath)
-	// if err != nil {
-	// 	http.Error(w, "Internal Server Error: "+err.Error(), http.StatusInternalServerError)
-	// }
-
-	// t := template.Must(template.New("base").ParseFiles("add_container.html", "add_form.html"))
-	err = t.Execute(w, ShoppingData{User: user.User{Name: "checkout man"}, Products: sm.cache.Get()})
+	totals := sm.getTotals()
+	err = t.Execute(w, ShoppingData{User: user.User{Name: "checkout man"}, Products: sm.cart.GetAll(),
+		Tax: totals.Tax, Total: totals.Total, Subtotal: totals.Subtotal})
 	if err != nil {
 		fmt.Println(err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
-	// data := struct {
-	// 	Title string
-	// }{
-	// 	Title: "Add Product",
-	// }
-
-	// // Render the base template with the embedded form template
-	// err = t.ExecuteTemplate(w, "build/templates/base", data)
-	// if err != nil {
-	// 	http.Error(w, "Internal Server Error: "+err.Error(), http.StatusInternalServerError)
-	// }
 }

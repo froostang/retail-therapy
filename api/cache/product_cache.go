@@ -8,7 +8,8 @@ import (
 // client API
 type ProductCacher interface {
 	Insert(string, product.Scraped)
-	Get() []product.Scraped
+	Get(string) product.Scraped
+	GetAll() []product.Scraped
 }
 
 // TODO: This cache stuff should live in shared module
@@ -56,11 +57,21 @@ func (p *Products) Insert(url string, ps product.Scraped) {
 	}
 }
 
-func (p *Products) Get() []product.Scraped {
+func (p *Products) GetAll() []product.Scraped {
 	scraped := make([]product.Scraped, 0, len(p.values))
 	for _, c := range p.values {
 		scraped = append(scraped, c.product)
 	}
 
 	return scraped
+}
+
+func (p *Products) Get(key string) product.Scraped {
+	for _, c := range p.values {
+		if c.product.Name == key {
+			return c.product
+		}
+	}
+
+	return product.Scraped{}
 }
