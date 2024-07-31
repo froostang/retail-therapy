@@ -9,7 +9,7 @@ import (
 	"github.com/froostang/retail-therapy/api/cache"
 	"github.com/froostang/retail-therapy/api/logging"
 	"github.com/froostang/retail-therapy/api/product"
-	"github.com/froostang/retail-therapy/shared/loggers"
+	"github.com/froostang/retail-therapy/api/shared/loggers"
 )
 
 // Define the AddProduct struct

@@ -2,8 +2,8 @@ package product
 
 import (
 	"github.com/froostang/retail-therapy/api/logging"
-	"github.com/froostang/retail-therapy/shared/scraper"
-	"github.com/froostang/retail-therapy/shared/scraper/assets"
+	"github.com/froostang/retail-therapy/api/shared/scraper"
+	"github.com/froostang/retail-therapy/api/shared/scraper/assets"
 )
 
 type Requester interface {

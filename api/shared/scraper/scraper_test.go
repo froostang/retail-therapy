@@ -7,7 +7,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/froostang/retail-therapy/shared/scraper/assets"
+	"github.com/froostang/retail-therapy/api/shared/scraper/assets"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )

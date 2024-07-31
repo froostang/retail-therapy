@@ -6,8 +6,8 @@ import (
 
 	"github.com/froostang/retail-therapy/api/cache"
 	"github.com/froostang/retail-therapy/api/http/handlers"
-	"github.com/froostang/retail-therapy/shared/loggers"
-	"github.com/froostang/retail-therapy/shared/middleware"
+	"github.com/froostang/retail-therapy/api/shared/loggers"
+	"github.com/froostang/retail-therapy/api/shared/middleware"
 	"go.uber.org/zap"
 )
 

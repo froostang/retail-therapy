@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/froostang/retail-therapy/shared/loggers"
+	"github.com/froostang/retail-therapy/api/shared/loggers"
 	"go.uber.org/zap/zaptest"
 )
 
