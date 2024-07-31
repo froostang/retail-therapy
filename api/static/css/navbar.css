@@ -25,6 +25,11 @@
     color: #000;
 }
 
+.navbar a.active {
+    background-color: #ff9900; /* Highlight color for the current page */
+    color: #fff; /* Adjust text color if needed */
+}
+
 .icon {
     position: relative;
 }
