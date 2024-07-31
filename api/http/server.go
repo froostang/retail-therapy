@@ -54,9 +54,16 @@ func NewServer(logger *zap.Logger) {
 		middleware.PanicRecovery))
 
 	// Add view
+	http.Handle("/about", middleware.Apply(
+		http.HandlerFunc(handlers.AboutRenderHandler),
+		middleware.PanicRecovery))
+
+	// Add view
 	http.Handle("/add-product", middleware.Apply(
 		http.HandlerFunc(handlers.AdderRenderHandler),
 		middleware.PanicRecovery))
+
+	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("static/css"))))
 
 	fmt.Println("Server is running on port 8080")
 	http.ListenAndServe(":8080", nil)
