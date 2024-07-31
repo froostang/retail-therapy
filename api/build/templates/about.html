@@ -14,12 +14,12 @@
             background-color: #f4f4f4;
         }
 
-
         header {
             background-color: #232f3e;
             color: white;
-            padding: 10px;
+            padding: 15px 20px;
             text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* Shadow for depth */
         }
 
         .container {
@@ -32,35 +32,39 @@
         }
 
         .section {
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
 
         .section h2 {
             color: #333;
+            margin-bottom: 15px; /* Spacing below heading */
+            font-size: 24px; /* Larger heading size */
         }
 
         .section p {
             color: #666;
-            line-height: 1.6;
+            line-height: 1.8; /* Improved line spacing */
+            font-size: 16px; /* Consistent font size */
         }
 
         .section img {
             max-width: 100%;
             height: auto;
             border-radius: 8px;
-            margin-top: 10px;
-            box-shadow: 0 0 5px rgba(0,0,0,0.2);
+            margin-top: 20px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.2); /* Shadow for images */
         }
 
         .cta-button {
             display: inline-block;
             background-color: #ff9900;
             color: white;
-            padding: 10px 20px;
-            font-size: 16px;
+            padding: 12px 25px; /* Enhanced padding */
+            font-size: 18px; /* Larger font size */
             text-decoration: none;
             border-radius: 5px;
-            margin-top: 10px;
+            margin-top: 20px; /* Spacing above button */
+            transition: background-color 0.3s; /* Smooth color transition */
         }
 
         .cta-button:hover {
@@ -70,11 +74,12 @@
         footer {
             background-color: #232f3e;
             color: white;
-            padding: 10px;
+            padding: 15px 20px; /* Enhanced padding */
             text-align: center;
             position: fixed;
             bottom: 0;
             width: 100%;
+            box-shadow: 0 -2px 4px rgba(0,0,0,0.2); /* Shadow for footer */
         }
     </style>
 </head>
@@ -83,7 +88,7 @@
     <div class="navbar">
         <a href="/shop">Shop</a>
         <a href="/add-product">Add Product</a>
-        <a href="/about">About</a>
+        <a href="/about" class="active">About</a>
         <a href="/checkout" class="icon">
             <i class="fas fa-shopping-cart"></i>
         </a>
@@ -127,18 +132,5 @@
     <footer>
         &copy; 2024 Your Retail Therapy Hub
     </footer>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const navLinks = document.querySelectorAll('.navbar a');
-            const currentPath = window.location.pathname;
-
-            navLinks.forEach(link => {
-                if (link.getAttribute('href') === currentPath) {
-                    link.classList.add('active');
-                }
-            });
-        });
-    </script>
 </body>
 </html>

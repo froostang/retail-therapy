@@ -36,43 +36,80 @@
 
         .product {
             border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 10px;
+            border-radius: 10px; /* More rounded corners */
+            padding: 15px;
             margin-bottom: 20px;
-            background-color: #f9f9f9;
-            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: box-shadow 0.3s, transform 0.3s;
+        }
+
+        .product:hover {
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+            transform: translateY(-5px); /* Slight lift effect on hover */
         }
 
         .product img {
-            max-width: 150px; /* Limit the maximum width of the image */
+            max-width: 150px;
             height: auto;
-            border-radius: 5px;
-            margin-bottom: 10px; /* Add space below the image */
-            float: right;
-            padding: 10px;
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-right: 20px;
         }
 
         .product h2 {
             color: #333;
+            font-size: 18px;
+            margin: 0;
         }
 
         .product p {
             color: #666;
+            margin: 5px 0;
         }
 
         .purchase-button {
-            background-color: #28a745;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            font-size: 16px;
+            background-color: #f0c14b; /* Amazon's button color */
+            color: #111; /* Text color */
+            border: 1px solid #a88734; /* Amazon's button border color */
+            padding: 12px 24px;
+            font-size: 18px;
             cursor: pointer;
             border-radius: 5px;
             text-align: center;
+            display: inline-block;
+            transition: background-color 0.3s, border-color 0.3s, transform 0.3s; /* Smooth transition */
+            position: relative; /* Position relative for ripple effect */
+            overflow: hidden; /* Hide overflow for ripple effect */
         }
 
         .purchase-button:hover {
-            background-color: #218838;
+            background-color: #e2a32c; /* Darker shade for hover effect */
+            border-color: #8e751a; /* Darker border color on hover */
+            transform: scale(1.05); /* Slight scale effect on hover */
+        }
+
+        .purchase-button:active::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: rgba(0,0,0,0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            animation: ripple 0.6s linear;
+        }
+
+        @keyframes ripple {
+            to {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0;
+            }
         }
 
         .help-box {
@@ -125,18 +162,21 @@
         {{range .Products}}
         <div class="product">
             <img src="{{.ImageURL}}" alt="Product Image">
-            <h2>{{.Name}}</h2>
-            <p>{{.Description}}</p>
-            <p>Price: ${{.Price}}</p>
-            <!-- Using HTMX for async request -->
-            <button
-                hx-post="/add-cart"
-                hx-trigger="click"
-                hx-target="#cart-notification"
-                hx-swap="none"
-                hx-vals='{"name": "{{.Name}}"}'>
-                Add to Cart
-            </button>
+            <div>
+                <h2>{{.Name}}</h2>
+                <p>{{.Description}}</p>
+                <p>Price: ${{.Price}}</p>
+                <!-- Using HTMX for async request -->
+                <button
+                    class="purchase-button"
+                    hx-post="/add-cart"
+                    hx-trigger="click"
+                    hx-target="#cart-notification"
+                    hx-swap="none"
+                    hx-vals='{"name": "{{.Name}}"}'>
+                    Add to Cart
+                </button>
+            </div>
         </div>
         {{end}}
         {{end}}
@@ -144,8 +184,9 @@
 
     <!-- Footer -->
     <footer>
-        &copy; 2024 Froostang
+        &copy; 2024 Your Retail Therapy Hub
     </footer>
+
 
     <!-- Notification area for cart actions -->
     <div id="cart-notification"></div>

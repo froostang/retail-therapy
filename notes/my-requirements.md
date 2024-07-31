@@ -1,6 +1,6 @@
 # api
-- server side rendering
-- library-free http server framework
+- server side rendering [ x ]
+- library-free http server framework [ x ]
 - JWT middleware
 - secret management
 
@@ -12,10 +12,10 @@
 
 
 # crawler
-- accept url, sanitize, validate, parse html
+- accept url, sanitize, validate, parse html [ x ]
 - common template attributes (manually validated)
 - rate limited? not public?
-- start with target.com
+- start with target.com [ x ]
 - MVP is this is self-generated instead
 
 
@@ -23,7 +23,7 @@
 - typescript web client?
 - or simple http
 - styling
-- MVP potentially just server-side rendering
+- MVP potentially just server-side rendering [ x ]
 
 
 # database
